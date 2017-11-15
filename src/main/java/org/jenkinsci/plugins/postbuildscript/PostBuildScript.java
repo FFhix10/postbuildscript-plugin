@@ -1,10 +1,5 @@
 package org.jenkinsci.plugins.postbuildscript;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -27,6 +22,11 @@ import hudson.tasks.Publisher;
 import org.jenkinsci.plugins.postbuildscript.service.ScriptExecutor;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.jenkinsci.plugins.postbuildscript.ExecuteOn.BOTH;
 
 
@@ -42,19 +42,19 @@ public class PostBuildScript extends Notifier implements MatrixAggregatable {
     }
 
     @Deprecated
-    private transient List<GenericScript> genericScriptList = new ArrayList<>();
+    private final transient List<GenericScript> genericScriptList = new ArrayList<>();
 
     @SuppressWarnings("deprecation")
-    private transient List<GroovyScript> groovyScriptList = new ArrayList<>();
+    private final transient List<GroovyScript> groovyScriptList = new ArrayList<>();
 
     private List<GenericScript> genericScriptFileList = new ArrayList<>();
     private List<GroovyScriptFile> groovyScriptFileList = new ArrayList<>();
     private List<GroovyScriptContent> groovyScriptContentList = new ArrayList<>();
     private List<BuildStep> buildSteps;
 
-    private boolean scriptOnlyIfSuccess;
-    private boolean scriptOnlyIfFailure;
-    private boolean markBuildUnstable;
+    private final boolean scriptOnlyIfSuccess;
+    private final boolean scriptOnlyIfFailure;
+    private final boolean markBuildUnstable;
     private ExecuteOn executeOn;
 
     @DataBoundConstructor
@@ -66,10 +66,10 @@ public class PostBuildScript extends Notifier implements MatrixAggregatable {
         boolean markBuildUnstable,
         ExecuteOn executeOn,
         List<BuildStep> buildStep) {
-        this.genericScriptFileList = genericScriptFile;
-        this.groovyScriptFileList = groovyScriptFile;
-        this.groovyScriptContentList = groovyScriptContent;
-        this.buildSteps = buildStep;
+        genericScriptFileList = genericScriptFile;
+        groovyScriptFileList = groovyScriptFile;
+        groovyScriptContentList = groovyScriptContent;
+        buildSteps = buildStep;
         this.scriptOnlyIfSuccess = scriptOnlyIfSuccess;
         this.scriptOnlyIfFailure = scriptOnlyIfFailure;
         this.markBuildUnstable = markBuildUnstable;
@@ -87,7 +87,7 @@ public class PostBuildScript extends Notifier implements MatrixAggregatable {
     }
 
     @Override
-    public boolean perform(AbstractBuild<?, ?> build, final Launcher launcher, final BuildListener listener) throws InterruptedException, IOException {
+    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
         Job job = build.getProject();
 
         boolean axe = isMatrixAxe(job);
@@ -98,7 +98,7 @@ public class PostBuildScript extends Notifier implements MatrixAggregatable {
         return axe || _perform(build, launcher, listener);
     }
 
-    private boolean _perform(AbstractBuild<?, ?> build, final Launcher launcher, final BuildListener listener) throws InterruptedException, IOException {
+    private boolean _perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
 
         listener.getLogger().println("[PostBuildScript] - Execution post build scripts.");
 
@@ -197,7 +197,7 @@ public class PostBuildScript extends Notifier implements MatrixAggregatable {
         return true;
     }
 
-    private boolean processGroovyScriptContentList(FilePath workspace, List<GroovyScriptContent> groovyScriptContentList, ScriptExecutor executor) throws PostBuildScriptException {
+    private boolean processGroovyScriptContentList(FilePath workspace, List<GroovyScriptContent> groovyScriptContentList, ScriptExecutor executor) {
 
         assert groovyScriptContentList != null;
 
@@ -314,7 +314,7 @@ public class PostBuildScript extends Notifier implements MatrixAggregatable {
         return executeOn;
     }
 
-    @Extension(ordinal = 99)
+    @Extension(ordinal = 99, optional = true)
     public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
         @Override
