@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>2.37</version>
+        <version>3.22</version>
     </parent>
 
     <artifactId>postbuildscript</artifactId>
@@ -12,6 +12,11 @@
     <name>Jenkins Post-Build Script Plug-in</name>
     <version>0.18.2-SNAPSHOT</version>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/PostBuildScript+Plugin</url>
+
+    <properties>
+        <java.level>8</java.level>
+    </properties>
+    ^
 
     <licenses>
         <license>
